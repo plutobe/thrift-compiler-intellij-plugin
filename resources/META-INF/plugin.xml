@@ -1,0 +1,44 @@
+<idea-plugin>
+    <id>com.github.plutobe.plugin.thrift</id>
+    <name>Thrift Compiler</name>
+    <version>1.0.0-RELEASE</version>
+    <vendor email="plutobe@outlook.com" url="https://github.com/plutobe">Pluto</vendor>
+
+    <description><![CDATA[
+      Thrift Compiler Plugin for IntelliJ IDEA
+      <br/>
+      An efficient and convenient thrift compiler plugin
+    ]]></description>
+
+    <change-notes><![CDATA[
+      <p>1.0.0-RELEASE</p>
+      <ul>
+        <li>Automatic compilation of thrift files when pull code from git repository</li>
+        <li>Can compile the specified thrift file separately, and support multiple selections, or even select directories</li>
+      </ul>
+    ]]>
+    </change-notes>
+
+    <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+    <idea-version since-build="193.0"/>
+
+    <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+    </extensions>
+
+    <actions>
+        <action id="CompileThriftActionID" class="com.github.plutobe.plugin.thrift.action.CompileThriftAction"
+                text="Thrift Compile" description="Thrift compile">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="after" relative-to-action="WeighingNewGroup"/>
+        </action>
+    </actions>
+
+    <projectListeners>
+        <listener class="com.github.plutobe.plugin.thrift.listener.VirtualFileListener"
+                  topic="com.intellij.openapi.vfs.newvfs.BulkFileListener"/>
+    </projectListeners>
+
+</idea-plugin>
