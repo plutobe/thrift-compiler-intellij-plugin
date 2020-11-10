@@ -1,6 +1,7 @@
 package com.github.plutobe.plugin.thrift.action;
 
 import com.github.plutobe.plugin.thrift.compiler.ThriftCompiler;
+import com.github.plutobe.plugin.thrift.constant.CompileActionTypeEnum;
 import com.github.plutobe.plugin.thrift.util.VirtualFileUtils;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -36,7 +37,7 @@ public class CompileThriftAction extends AnAction {
                 }
             }
         }
-        ThriftCompiler.compile(thriftVirtualFileList);
+        ThriftCompiler.compile(thriftVirtualFileList, CompileActionTypeEnum.AN_ACTION);
     }
 
 }

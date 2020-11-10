@@ -1,6 +1,7 @@
 package com.github.plutobe.plugin.thrift.listener;
 
 import com.github.plutobe.plugin.thrift.compiler.ThriftCompiler;
+import com.github.plutobe.plugin.thrift.constant.CompileActionTypeEnum;
 import com.github.plutobe.plugin.thrift.util.VirtualFileUtils;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.newvfs.BulkFileListener;
@@ -37,7 +38,7 @@ public class VirtualFileListener implements BulkFileListener {
                 })
                 .map(VFileEvent::getFile)
                 .collect(Collectors.toList());
-        ThriftCompiler.compile(thriftVirtualFileList);
+        ThriftCompiler.compile(thriftVirtualFileList, CompileActionTypeEnum.FILE_LISTENER);
     }
 
 }

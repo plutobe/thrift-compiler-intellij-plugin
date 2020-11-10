@@ -1,10 +1,11 @@
 package com.github.plutobe.plugin.thrift.compiler;
 
+import com.github.plutobe.plugin.thrift.constant.CompileActionTypeEnum;
 import com.github.plutobe.plugin.thrift.constant.Constants;
-import com.github.plutobe.plugin.thrift.dialog.ConfigureThriftPathDialog;
 import com.github.plutobe.plugin.thrift.notifier.MessageNotifier;
 import com.github.plutobe.plugin.thrift.util.CommandExecutor;
 import com.github.plutobe.plugin.thrift.util.ProjectUtils;
+import com.github.plutobe.plugin.thrift.dialog.ConfigureThriftPathDialog;
 import com.google.common.util.concurrent.AtomicDouble;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.progress.ProgressIndicator;
@@ -30,30 +31,33 @@ import java.util.stream.Collectors;
  */
 public class ThriftCompiler {
 
-    public static void compile(List<VirtualFile> virtualFileList) {
+    public static void compile(List<VirtualFile> virtualFileList, CompileActionTypeEnum actionType) {
+        String thriftPathCache = PropertiesComponent.getInstance().getValue(Constants.THRIFT_PATH_PROPERTY_KEY);
+        String thriftPath = checkThriftPath(thriftPathCache);
+        if (thriftPath == null) {
+            if (CompileActionTypeEnum.FILE_LISTENER == actionType) {
+                return;
+            }
+            MessageNotifier.notice("thrift path is not configured", MessageType.ERROR);
+            ConfigureThriftPathDialog configureThriftPathDialog = new ConfigureThriftPathDialog();
+            configureThriftPathDialog.show();
+            return;
+        }
+        if (CollectionUtils.isEmpty(virtualFileList)) {
+            return;
+        }
+        List<VirtualFile> thriftVirtualFileList = virtualFileList.parallelStream()
+                .distinct()
+                .filter(thriftVirtualFile -> thriftVirtualFile.getPath().contains(Constants.THRIFT_FILE_PATH))
+                .collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(thriftVirtualFileList)) {
+            return;
+        }
         ProgressManager.getInstance().run(new Task.Backgroundable(ProjectUtils.getCurrentProject(), "Thrift compiling") {
             @Override
             public void run(@NotNull ProgressIndicator progressIndicator) {
-                String thriftPathCache = PropertiesComponent.getInstance().getValue(Constants.THRIFT_PATH_PROPERTY_KEY);
-                String thriftPath = checkThriftPath(thriftPathCache);
-                if (thriftPath == null) {
-                    MessageNotifier.notice("thrift path is not configured", MessageType.ERROR);
-                    if (ConfigureThriftPathDialog.isShowing) {
-                        return;
-                    }
-                    ConfigureThriftPathDialog configureThriftPathDialog = new ConfigureThriftPathDialog();
-                    configureThriftPathDialog.show();
-                    return;
-                }
-                if (CollectionUtils.isEmpty(virtualFileList)) {
-                    return;
-                }
                 AtomicDouble progress = new AtomicDouble();
                 Map<String, Integer> compileResultMap = new LinkedHashMap<>();
-                List<VirtualFile> thriftVirtualFileList = virtualFileList.parallelStream()
-                        .distinct()
-                        .filter(thriftVirtualFile -> thriftVirtualFile.getPath().contains(Constants.THRIFT_FILE_PATH))
-                        .collect(Collectors.toList());
                 thriftVirtualFileList.forEach(thriftVirtualFile -> {
                             String thriftFilePath = thriftVirtualFile.getPath();
                             String thriftFullPath = thriftFilePath.substring(0, thriftFilePath.indexOf(Constants.THRIFT_FILE_PATH) + Constants.THRIFT_FILE_PATH.length());

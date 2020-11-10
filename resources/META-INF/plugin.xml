@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.github.plutobe.plugin.thrift</id>
     <name>Thrift Compiler</name>
-    <version>1.0.0-RELEASE</version>
+    <version>1.0.4-SNAPSHOT</version>
     <vendor email="plutobe@outlook.com" url="https://github.com/plutobe">Pluto</vendor>
 
     <description><![CDATA[
@@ -11,7 +11,25 @@
     ]]></description>
 
     <change-notes><![CDATA[
-      <p>1.0.0-RELEASE</p>
+      <p>1.0.4-SNAPSHOT</p>
+      <ul>
+        <li>Optimize running speed</li>
+      </ul>
+      <p>1.0.3-SNAPSHOT</p>
+      <ul>
+        <li>Fixed bug not popup when thrift path is not configured</li>
+      </ul>
+      <p>1.0.2-SNAPSHOT</p>
+      <ul>
+        <li>Increase the progress bar when compiling to ease the anxiety of waiting</li>
+        <li>The compilation action is optimized to be asynchronous</li>
+      </ul>
+      <p>1.0.1-SNAPSHOT</p>
+      <ul>
+        <li>Fixed bug that compile causes the program to freeze</li>
+        <li>Fixed bug continuous popup when thrift path is not configured</li>
+      </ul>
+      <p>1.0.0-SNAPSHOT</p>
       <ul>
         <li>Automatic compilation of thrift files when pull code from git repository</li>
         <li>Can compile the specified thrift file separately, and support multiple selections, or even select directories</li>

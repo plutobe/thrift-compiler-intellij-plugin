@@ -16,8 +16,6 @@ import javax.swing.*;
  */
 public class ConfigureThriftPathDialog extends DialogWrapper {
 
-    public static boolean isShowing = false;
-
     private EditorTextField thriftPathField;
 
     public ConfigureThriftPathDialog() {
@@ -63,23 +61,11 @@ public class ConfigureThriftPathDialog extends DialogWrapper {
                 return;
             }
             PropertiesComponent.getInstance().setValue(Constants.THRIFT_PATH_PROPERTY_KEY, thriftPathText);
-            dispose();
+            ConfigureThriftPathDialog.this.dispose();
         });
         panel.add(testButton);
         panel.add(confirmButton);
         return panel;
-    }
-
-    @Override
-    public void show() {
-        super.show();
-        isShowing = true;
-    }
-
-    @Override
-    public void dispose() {
-        super.dispose();
-        isShowing = false;
     }
 
 }
